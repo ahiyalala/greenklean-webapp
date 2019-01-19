@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
-import './App.css';
+import { Route, Link, BrowserRouter as Router } from 'react-router-dom';
+import './Styles/app.scss';
 
 class App extends Component {
+  
   render() {
     return (
       <div className="App">

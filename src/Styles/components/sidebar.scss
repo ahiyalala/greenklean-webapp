@@ -1,0 +1,34 @@
+.profile-sidebar{
+    display:inline-block;
+    border:1px solid lightgray;
+    width:20%;
+    padding:40px;
+    box-shadow: 2px 0px 9px 0px lightgrey;
+
+    @include respond-to-small{
+        display:none;
+    }
+}
+
+.sidebar-navigation{
+    text-decoration: none;
+    border-radius:5px;
+    display:block;
+    color:white;
+    padding:10px;
+    background-color:$greenklean-yellow;
+    position:relative;
+    margin-bottom:10px;
+    .la{
+        position: absolute;
+        right:0;
+        margin-right:20px;
+        line-height:1.5rem;
+    }
+}
+
+.logout-button{
+    color:#dc3545;
+    text-decoration: none;
+    font-size:0.80rem;
+}

@@ -1,0 +1,25 @@
+span, p, h1,h2,h3,h4,h5,h6, a,label{
+    font-size:$base;
+}
+
+.brand-text-color{
+    color:$brand-text-color;
+}
+
+.form-label{
+    font-size:$small;
+}
+
+.login-message{
+    text-align: center;
+    font-size:$small;
+    display:none;
+}
+
+.error{
+    color:$red;
+}
+
+.subdetails{
+    font-size:0.8rem;
+}

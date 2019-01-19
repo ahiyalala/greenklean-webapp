@@ -1,0 +1,19 @@
+@mixin respond-to-xlarge{
+    @media all and (max-width: 1199px) { @content;  } 
+}
+
+@mixin respond-to-large{
+    @media all and (max-width: 991px) { @content;  } 
+}
+
+
+
+@mixin respond-to-medium{
+    @media all and (max-width: 768px) { @content; }
+}
+
+@mixin respond-to-small{
+    @media all and (max-width: 575px) {  
+        @content;
+    }
+}
