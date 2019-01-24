@@ -21,7 +21,8 @@ export default class Login extends React.Component{
             }
             Data.authenticateUser('/api/users/login',credentials,(status,result) => {
                 if(status){
-                    localStorage.setItem('credentials',result);
+                    delete result.password;
+                    localStorage.setItem('credentials',JSON.stringify(result));
                     this.setState({hasMessage:""});
                 }
                 else{
