@@ -1,150 +1,173 @@
-.booking-container{
-    width:80%;
-    display:inline-block;
-    padding:1rem 2rem;
+.booking-container {
+  width: 80%;
+  display: inline-block;
+  padding: 1rem 2rem;
 
-    @include respond-to-small{
-        padding:1rem 0;
-        width:100%;
-    }
+  @include respond-to-small {
+    padding: 1rem 0;
+    width: 100%;
+  }
 }
 
-.booking-header{
-    font-size:1.5rem;
+.booking-header {
+  font-size: 1.5rem;
 }
 
-.booking-category{
-    margin-bottom:10px;
-    display:block;
+.booking-category {
+  margin-bottom: 10px;
+  display: block;
 }
 
-.booking-list{
-    margin-bottom:1rem;
+.booking-list {
+  margin-bottom: 1rem;
 }
 
-.booking-block{
-    display:flex;
-    padding:10px;
-    margin-bottom:10px;
-    border:1px solid lightgray;
-    box-shadow: 0px 3px 10px lightgrey;
-    cursor: pointer;
+.booking-block {
+  display: flex;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid lightgray;
+  box-shadow: 0px 3px 10px lightgrey;
+  cursor: pointer;
 
-    @include respond-to-small{
-        padding:1rem;
-    }
+  @include respond-to-small {
+    padding: 1rem;
+  }
 }
 
-.booking-block--right{
-    text-align: right;
+.booking-block--right {
+  text-align: right;
 }
 
-.booking-block__section{
-    width:50%;
+.booking-block__section {
+  width: 50%;
 }
 
-.booking-description{
-    display:block;
+.booking-description {
+  display: block;
 }
-.booking-details__backdrop{
-    position: fixed;
+.booking-details__backdrop {
+  position: fixed;
 
-    width:100%;
-    height:100%;
+  width: 100%;
+  height: 100%;
 
-    top:0;
-    left:0;
+  top: 0;
+  left: 0;
 
-    background:rgba(0,0,0,0.7)
-}
-
-.booking-details{
-    background-color:white;
-    width:400px;
-    
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    /* bring your own prefixes */
-    transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.7);
 }
 
-.booking-details__subtext{
-    margin:0.5rem 0;
+.booking-details {
+  background-color: white;
+  width: 400px;
+
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
 }
 
-.booking-details__header{
-    padding:2rem;
-    background-color:#faed2b;
-    position:relative;
+.booking-details__subtext {
+  margin: 0.5rem 0;
 }
 
-.booking-details__content{
-    padding:2rem;
-    min-height:15rem;
+.booking-details__header {
+  padding: 2rem;
+  background-color: #faed2b;
+  position: relative;
 }
 
-.booking-details__service-type{
-    margin:0;
-    margin-bottom: 1.5rem;
-    font-size:2rem;
-
-    font-weight: normal;
+.booking-details__content {
+  padding: 2rem;
+  min-height: 15rem;
 }
 
-.booking-details__data{
-    display:block;
-    font-size:0.8rem;
-    margin-bottom:0.3rem;
+.booking-details__service-type {
+  margin: 0;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+
+  font-weight: normal;
 }
 
-.booking-details__rating{
-    font-size:1rem;
-    margin-left:1rem;
-    float:right;
-
-    &.booking-details__rating--no-rating{
-        font-size:0.8rem;
-    }
+.booking-details__data {
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 0.3rem;
 }
 
-.booking-details__value{
-    font-size:1rem;
-    margin-left:0.5rem;
+.booking-details__rating {
+  font-size: 1rem;
+  margin-left: 1rem;
+  float: right;
 }
 
-.booking-details__housekeepers{
-    padding-left:0;
+.booking-details__rating--no-rating {
+  font-size: 0.8rem;
 }
 
-.booking-details__housekeeper{
-    list-style-type: none;
-    margin-bottom:0.5rem;
+.booking-details__value {
+  font-size: 1rem;
+  margin-left: 0.5rem;
 }
 
-.booking-details__cancel{
-    padding:0.8rem;
-    text-align:center;
-    color:white;
-    background-color:red;
-    display:block;
-
-    cursor: pointer;
-
-    &:hover{
-        background-color:rgba(255,0,0,0.9);
-    }
-
-    &--unavailable{
-        background-color:rgba(0,0,0,0.8);
-        color:rgba(255,255,255,0.6);
-        pointer-events: none;
-    }
+.booking-details__housekeepers {
+  padding-left: 0;
 }
 
-.booking-details__close{
-    display:block;
-    text-align:right;
+.booking-details__housekeeper {
+  list-style-type: none;
+  margin-bottom: 0.5rem;
+}
 
-    cursor: pointer;
+.booking-details__cancel {
+  padding: 0.8rem;
+  text-align: center;
+  color: white;
+  background-color: red;
+  display: block;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(255, 0, 0, 0.9);
+  }
+
+  &--unavailable {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+  }
+}
+
+.booking-details__close {
+  display: block;
+  text-align: right;
+
+  cursor: pointer;
+}
+
+.booking-header__scheduler {
+  float: right;
+  display: block;
+  font-weight: normal;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: #faed2b;
+  border-radius: 16px;
+}
+
+.booking-scheduler__backdrop {
+  position: fixed;
+
+  width: 100%;
+  height: 100%;
+
+  top: 0;
+  left: 0;
+
+  background: rgba(0, 0, 0, 0.7);
 }

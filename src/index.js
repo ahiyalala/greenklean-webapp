@@ -6,6 +6,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Login from './Pages/Login';
 import Dashboard from './Pages/Dashboard';
+import Places from './Pages/Places';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={(props) => (
@@ -18,7 +19,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 ReactDOM.render(
     <Router>
         <div>
-            <PrivateRoute path="/booking" component={Dashboard} />  
+            <PrivateRoute path="/booking" exact component={Dashboard} /> 
+            <PrivateRoute path="/booking/places" component={Places} />   
             <Route exact path="/login" component={Login} />
         </div>
     </Router>, 
