@@ -158,18 +158,24 @@ export default class Booking extends React.Component {
           </div>
           <div className="booking-scheduler__body">
             <div className="booking-scheduler__field">
-              <label>
+              <label class="booking-scheduler__label">
                 Service
-                <select ref={this.serviceTypeId}>
+              </label>
+              <div class="booking-scheduler__input" ref={this.serviceTypeId}>
+                <div class="booking-scheduler__selected">
+                    <small class="booking-scheduler__title">Item</small>
+                    <span class="booking-scheduler__value">Value</span>
+                </div>
+                <ul className="booking-scheduler__options">
                   {this.state.services.map((value, index) => {
                     return (
-                      <option value={value.service_type_key} key={index}>
-                        {value.service_type_key}
-                      </option>
+                      <li className="booking-scheduler__option" data-value={value.service_type_key} key={index}>
+                        <span className="booking-scheduler__value">{value.service_type_key}</span>
+                      </li>
                     );
                   })}
-                </select>
-              </label>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

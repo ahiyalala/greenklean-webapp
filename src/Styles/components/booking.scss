@@ -58,7 +58,8 @@
   background: rgba(0, 0, 0, 0.7);
 }
 
-.booking-details {
+.booking-details,
+.booking-scheduler__container {
   background-color: white;
   width: 400px;
 
@@ -73,13 +74,15 @@
   margin: 0.5rem 0;
 }
 
-.booking-details__header {
+.booking-details__header,
+.booking-scheduler__header {
   padding: 2rem;
   background-color: #faed2b;
   position: relative;
 }
 
-.booking-details__content {
+.booking-details__content,
+.booking-scheduler__body {
   padding: 2rem;
   min-height: 15rem;
 }
@@ -170,4 +173,32 @@
   left: 0;
 
   background: rgba(0, 0, 0, 0.7);
+}
+
+
+.booking-scheduler__label,
+.booking-scheduler__input{
+  display:block;
+}
+
+.booking-scheduler__input{
+  background:white;
+  color:black;
+  padding:0.5rem;
+  width: 100%;
+}
+
+.booking-scheduler__option{
+  list-style-type:none;
+  padding:0.5rem;
+  cursor:pointer;
+
+  &:hover{
+    background:rgba(0,0,0,0.01);
+  }  
+}
+
+.booking-scheduler__item,
+.booking-scheduler__value{
+  display:block;
 }
