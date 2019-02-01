@@ -4,11 +4,27 @@ import Data from "../Helpers/Data";
 export default class Booking extends React.Component {
   constructor(props) {
     super(props);
+
+    //Refs
+    this.serviceTypeId = React.createRef();
+
+    //States
     this.state = {
       isWindowClosed: true,
-      isBookingClosed: true,
-      selectedAppointment: null
+      isBookingClosed: false,
+      selectedAppointment: null,
+      services: []
     };
+  }
+
+  componentDidMount() {
+    Data.getData("/api/services", (result, data) => {
+      if (!result) return;
+
+      this.setState({
+        services: data
+      });
+    });
   }
 
   toggleWindow = e => {
@@ -140,6 +156,22 @@ export default class Booking extends React.Component {
           <div className="booking-scheduler__header">
             <h4>Book a service</h4>
           </div>
+          <div className="booking-scheduler__body">
+            <div className="booking-scheduler__field">
+              <label>
+                Service
+                <select ref={this.serviceTypeId}>
+                  {this.state.services.map((value, index) => {
+                    return (
+                      <option value={value.service_type_key} key={index}>
+                        {value.service_type_key}
+                      </option>
+                    );
+                  })}
+                </select>
+              </label>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -155,7 +187,7 @@ export default class Booking extends React.Component {
             href="javascript:void(0);"
             onClick={e => this.openBooking(e)}
           >
-            Book a service
+            Book now
           </a>
         </h2>
         <small className="booking-category">
