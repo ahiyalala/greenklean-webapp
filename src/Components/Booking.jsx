@@ -11,9 +11,12 @@ export default class Booking extends React.Component {
     //States
     this.state = {
       isWindowClosed: true,
-      isBookingClosed: false,
+      isBookingClosed: true,
       selectedAppointment: null,
-      services: []
+      services: [],
+      bookingDetails: {
+        service: {}
+      }
     };
   }
 
@@ -55,6 +58,8 @@ export default class Booking extends React.Component {
       };
     });
   };
+
+  setService = (value, e) => {};
 
   renderStars(rating) {
     if (rating == 0) {
@@ -158,19 +163,24 @@ export default class Booking extends React.Component {
           </div>
           <div className="booking-scheduler__body">
             <div className="booking-scheduler__field">
-              <label class="booking-scheduler__label">
-                Service
-              </label>
+              <strong class="booking-scheduler__label">Service</strong>
               <div class="booking-scheduler__input" ref={this.serviceTypeId}>
                 <div class="booking-scheduler__selected">
-                    <small class="booking-scheduler__title">Item</small>
-                    <span class="booking-scheduler__value">Value</span>
+                  <small class="booking-scheduler__title">Item</small>
+                  <span class="booking-scheduler__value">Value</span>
                 </div>
                 <ul className="booking-scheduler__options">
                   {this.state.services.map((value, index) => {
                     return (
-                      <li className="booking-scheduler__option" data-value={value.service_type_key} key={index}>
-                        <span className="booking-scheduler__value">{value.service_type_key}</span>
+                      <li
+                        className="booking-scheduler__option"
+                        data-value={value.service_type_key}
+                        key={index}
+                        onClick={e => this.setService(value, e)}
+                      >
+                        <span className="booking-scheduler__value">
+                          {value.service_type_key}
+                        </span>
                       </li>
                     );
                   })}

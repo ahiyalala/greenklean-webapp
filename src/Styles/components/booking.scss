@@ -175,30 +175,42 @@
   background: rgba(0, 0, 0, 0.7);
 }
 
-
 .booking-scheduler__label,
-.booking-scheduler__input{
-  display:block;
+.booking-scheduler__input {
+  display: block;
 }
 
-.booking-scheduler__input{
-  background:white;
-  color:black;
-  padding:0.5rem;
+.booking-scheduler__label {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+}
+
+.booking-scheduler__input {
+  background: white;
+  color: black;
+  padding: 0.5rem;
   width: 100%;
+
+  border: 1px solid lightgray;
+  position: relative;
 }
 
-.booking-scheduler__option{
-  list-style-type:none;
-  padding:0.5rem;
-  cursor:pointer;
+.booking-scheduler__option {
+  list-style-type: none;
+  padding: 0.5rem;
+  cursor: pointer;
 
-  &:hover{
-    background:rgba(0,0,0,0.01);
-  }  
+  &:hover {
+    background: rgba(0, 0, 0, 0.01);
+  }
+}
+
+.booking-scheduler__options {
+  position: absolute;
+  padding: 0;
 }
 
 .booking-scheduler__item,
-.booking-scheduler__value{
-  display:block;
+.booking-scheduler__value {
+  display: block;
 }

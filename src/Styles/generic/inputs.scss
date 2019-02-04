@@ -1,26 +1,28 @@
-input{
-    padding:10px;
+input {
+  padding: 10px;
 }
 
-.form-field{
-    display:block;
-    margin-bottom:20px;
+.form-field {
+  display: block;
+  margin-bottom: 20px;
 }
 
-.login-btn{
-    width:100%;
-    background: #FAED2C;
-    border:none;
-    padding:5px;
-    font-size:$small;
+.login-btn {
+  width: 100%;
+  background: #faed2c;
+  border: none;
+  padding: 5px;
+  font-size: $small;
+  cursor: pointer;
 }
 
-.signup-btn{
-    text-align: center;
-    display:block;
-    border:1px solid lightgray;
-    text-decoration: none;
-    color:black;
-    font-size:11px;
-    padding:5px;
+.signup-btn {
+  text-align: center;
+  display: block;
+  border: 1px solid lightgray;
+  text-decoration: none;
+  color: black;
+  font-size: 11px;
+  padding: 5px;
+  cursor: pointer;
 }
