@@ -1,6 +1,7 @@
 import React from "react";
 import Data from "../Helpers/Data";
 import { Redirect } from "react-router-dom";
+import bcrypt from "bcryptjs";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -21,7 +22,6 @@ export default class Login extends React.Component {
         email: 0,
         password: 0,
         first_name: 0,
-        middle_name: 0,
         last_name: 0,
         birth_date: 0,
         contact_number: 0,
@@ -41,7 +41,7 @@ export default class Login extends React.Component {
   }
 
   signup = e => {
-    if (!this.canThisSignUp) return;
+    if (!this.canThisSignUp()) return;
 
     this.setState({
       formValidity: {
@@ -54,6 +54,9 @@ export default class Login extends React.Component {
       }
     });
 
+    var data = this.state.signUpData;
+    data.password = bcrypt.hashSync(this.state.signUpData.password, 8);
+
     Data.sendData("/api/users", this.state.signUpData, (result, data) => {
       if (result) {
         this.setState({
@@ -61,11 +64,12 @@ export default class Login extends React.Component {
         });
         return;
       }
-
-      this.setState({
-        signUpSuccessful: -1
-      });
-      return;
+      else{
+              this.setState({
+                signUpSuccessful: -1
+              });
+              return;
+      }
     });
   };
 
@@ -94,6 +98,21 @@ export default class Login extends React.Component {
       });
     }
   };
+
+  setGender = (e,value) => {
+    this.setState((prevState)=>{
+      var prevData = prevState.signUpData;
+      var prevValidity = prevState.formValidity;
+
+      prevData.gender = value;
+      prevValidity.gender = 1;
+
+      return {
+        formValidity:prevValidity,
+        signUpData:prevData
+      }
+    })
+  }
 
   checkPassword = e => {
     var password = this.passwordField.current.value;
@@ -162,9 +181,35 @@ export default class Login extends React.Component {
     return "form-error";
   };
 
+  setCompleted = () => {
+
+    return (
+      <div className="login-container">
+      <div className="login-backdrop">
+        <img
+          className="img-logo"
+          src="https://greenklean.ph/front/img/GKlean House Icon Y.png"
+        />
+        <h3 className="brand-text-color">Welcome to Greenklean</h3>
+        <div className="form-region">
+          <h2 className="form-header">You have successfully signed up!</h2>
+          <hr />
+          <a href="/login" className="signup-btn">
+            Back to login
+          </a>
+        </div>
+      </div>
+    </div>
+    );
+  }
+
   render() {
     if (localStorage.getItem("credentials") != null) {
       return <Redirect to="/booking" />;
+    }
+
+    if(this.state.signUpSuccessful == 1){
+      return this.setCompleted();
     }
 
     return (
@@ -179,8 +224,8 @@ export default class Login extends React.Component {
             <h4 className="form-header">Sign up</h4>
             <span
               className="login-message error"
-              style={{ display: this.state.hasMessage }}
-            />
+              style={{ display: (this.state.signUpSuccessful == -1)? "block":"none" }}
+            >Failed to signup, try again or contact administrator</span>
             <div className="form-row nowrap">
               <label className="form-label">
                 E-mail address*
@@ -287,6 +332,7 @@ export default class Login extends React.Component {
                     id="male"
                     name="gender"
                     ref={this.genderMField}
+                    onChange={e => this.setGender(e, 0)}
                   />
                   <span>Male</span>
                 </label>
@@ -296,6 +342,7 @@ export default class Login extends React.Component {
                     id="female"
                     name="gender"
                     ref={this.genderFField}
+                    onChange={e => this.setGender(e, 1)}
                   />
                   <span>Female</span>
                 </label>

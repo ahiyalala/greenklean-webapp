@@ -1,5 +1,5 @@
 import React from "react";
-const baseUrl = "http://localhost:80";
+const baseUrl = "https://greenklean.ph";
 
 export default class Data extends React.Component {
   static getData(url, fallback) {
@@ -38,7 +38,7 @@ export default class Data extends React.Component {
       body: JSON.stringify(content)
     })
       .then(response => {
-        if (response.ok) return response.json();
+        if (response.ok) return response.body;
 
         throw new Error("fail");
       })
