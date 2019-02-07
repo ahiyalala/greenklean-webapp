@@ -1,5 +1,5 @@
 import React from "react";
-const baseUrl = "https://greenklean.ph";
+const baseUrl = "http://localhost:80";
 
 export default class Data extends React.Component {
   static getData(url, fallback) {
@@ -37,8 +37,13 @@ export default class Data extends React.Component {
       method: "post",
       body: JSON.stringify(content)
     })
-      .then(response => response.json())
-      .then(data => fallback(data));
+      .then(response => {
+        if (response.ok) return response.json();
+
+        throw new Error("fail");
+      })
+      .then(data => fallback(true, data))
+      .catch(error => fallback(false, error));
   }
 
   static async authenticateUser(url, content, fallback) {

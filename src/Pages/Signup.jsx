@@ -9,12 +9,25 @@ export default class Login extends React.Component {
       hasMessage: "",
       signUpData: {
         email_address: null,
-        password: null
+        password: null,
+        first_name: null,
+        middle_name: null,
+        last_name: null,
+        gender: null,
+        birth_date: null,
+        contact_number: null
       },
       formValidity: {
         email: 0,
-        password: 0
-      }
+        password: 0,
+        first_name: 0,
+        middle_name: 0,
+        last_name: 0,
+        birth_date: 0,
+        contact_number: 0,
+        gender: 0
+      },
+      signUpSuccessful: 0
     };
     this.passwordField = React.createRef();
     this.firstNameField = React.createRef();
@@ -24,10 +37,37 @@ export default class Login extends React.Component {
     this.genderMField = React.createRef();
     this.genderFField = React.createRef();
     this.contactNumberField = React.createRef();
-    this.login = this.signupEvent.bind(this);
+    this.dateOfBirthField = React.createRef();
   }
 
-  signupEvent(e) {}
+  signup = e => {
+    if (!this.canThisSignUp) return;
+
+    this.setState({
+      formValidity: {
+        email: 0,
+        password: 0,
+        first_name: 0,
+        last_name: 0,
+        birth_date: 0,
+        contact_number: 0
+      }
+    });
+
+    Data.sendData("/api/users", this.state.signUpData, (result, data) => {
+      if (result) {
+        this.setState({
+          signUpSuccessful: 1
+        });
+        return;
+      }
+
+      this.setState({
+        signUpSuccessful: -1
+      });
+      return;
+    });
+  };
 
   checkEmail = e => {
     let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -78,6 +118,40 @@ export default class Login extends React.Component {
         };
       });
     }
+  };
+
+  checkIfNull = (e, key, reference) => {
+    var value = reference.current.value;
+    if (value === "") {
+      this.setState(prevState => {
+        var prevValidity = prevState.formValidity;
+        prevValidity[key] = -1;
+        return {
+          formValidity: prevValidity
+        };
+      });
+    } else {
+      this.setState(prevState => {
+        var prevData = prevState.signUpData;
+        var prevValidity = prevState.formValidity;
+        prevData[key] = value;
+        prevValidity[key] = 1;
+        return {
+          signUpData: prevData,
+          formValidity: prevValidity
+        };
+      });
+    }
+  };
+
+  canThisSignUp = () => {
+    var validityList = this.state.formValidity;
+
+    for (var key in validityList) {
+      if (validityList[key] != 1) return false;
+    }
+
+    return true;
   };
 
   formValid = value => {
@@ -139,8 +213,14 @@ export default class Login extends React.Component {
                 First name*
                 <input
                   type="text"
-                  className="form-field"
+                  className={
+                    "form-field " +
+                    this.formValid(this.state.formValidity.first_name)
+                  }
                   ref={this.firstNameField}
+                  onBlur={e =>
+                    this.checkIfNull(e, "first_name", this.firstNameField)
+                  }
                 />
               </label>
               <label className="form-label">
@@ -155,8 +235,14 @@ export default class Login extends React.Component {
                 Last name*
                 <input
                   type="text"
-                  className="form-field"
+                  className={
+                    "form-field " +
+                    this.formValid(this.state.formValidity.last_name)
+                  }
                   ref={this.lastNameField}
+                  onBlur={e =>
+                    this.checkIfNull(e, "last_name", this.lastNameField)
+                  }
                 />
               </label>
             </div>
@@ -165,21 +251,37 @@ export default class Login extends React.Component {
                 Contact number*
                 <input
                   type="tel"
-                  className="form-field"
+                  className={
+                    "form-field " +
+                    this.formValid(this.state.formValidity.contact_number)
+                  }
                   ref={this.contactNumberField}
+                  onBlur={e =>
+                    this.checkIfNull(
+                      e,
+                      "contact_number",
+                      this.contactNumberField
+                    )
+                  }
                 />
               </label>
               <label className="form-label">
                 Date of Birth*
                 <input
                   type="date"
-                  className="form-field"
-                  ref={this.contactNumberField}
+                  className={
+                    "form-field " +
+                    this.formValid(this.state.formValidity.birth_date)
+                  }
+                  ref={this.dateOfBirthField}
+                  onBlur={e =>
+                    this.checkIfNull(e, "birth_date", this.dateOfBirthField)
+                  }
                 />
               </label>
               <label className="form-label lower-gutter">
                 <span className="field-title">Gender</span>
-                <label for="male">
+                <label htmlFor="male">
                   <input
                     type="radio"
                     id="male"
@@ -188,7 +290,7 @@ export default class Login extends React.Component {
                   />
                   <span>Male</span>
                 </label>
-                <label for="female">
+                <label htmlFor="female">
                   <input
                     type="radio"
                     id="female"
@@ -199,7 +301,12 @@ export default class Login extends React.Component {
                 </label>
               </label>
             </div>
-            <button className="login-btn" onClick={e => this.signup(e)}>
+            <button
+              className={
+                this.canThisSignUp() ? "login-btn" : "login-btn disabled"
+              }
+              onClick={e => this.signup(e)}
+            >
               Sign up
             </button>
             <span className="block-span">or</span>

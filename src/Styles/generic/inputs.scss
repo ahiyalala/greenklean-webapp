@@ -14,6 +14,9 @@ input {
   padding: 5px;
   font-size: $small;
   cursor: pointer;
+  &.disabled {
+    background: gray;
+  }
 }
 
 .signup-btn {
