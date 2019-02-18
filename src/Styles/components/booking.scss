@@ -189,10 +189,13 @@
   background: white;
   color: black;
   padding: 0.5rem;
-  width: 100%;
+
+  margin-bottom: 0.5rem;
 
   border: 1px solid lightgray;
   position: relative;
+
+  cursor: pointer;
 }
 
 .booking-scheduler__option {
@@ -208,9 +211,23 @@
 .booking-scheduler__options {
   position: absolute;
   padding: 0;
+  margin: 0;
+  margin-left: -0.5rem;
+
+  background-color: white;
+  z-index: 10;
+  width: 100%;
+
+  box-shadow: 0px 10px 10px lightgrey;
 }
 
 .booking-scheduler__item,
 .booking-scheduler__value {
   display: block;
+}
+
+.booking-scheduler__value {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

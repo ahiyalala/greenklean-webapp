@@ -7,15 +7,33 @@ export default class Booking extends React.Component {
 
     //Refs
     this.serviceTypeId = React.createRef();
-
+    var customer = localStorage.getItem("credentials");
     //States
     this.state = {
       isWindowClosed: true,
       isBookingClosed: true,
       selectedAppointment: null,
       services: [],
+      location: [],
       bookingDetails: {
         service: {}
+      },
+      windows: {
+        service: false,
+        location: false
+      },
+      bookingDisplay: {
+        service: null,
+        location: null
+      },
+      bookingForm: {
+        service_type_key: null,
+        customer_id: customer.customer_id,
+        location_id: null,
+        payment_type: "Cash",
+        date: null,
+        start_time: null,
+        number_of_housekeepers: 1
       }
     };
   }
@@ -28,6 +46,33 @@ export default class Booking extends React.Component {
         services: data
       });
     });
+
+    Data.getAuthenticatedData("/api/places", (result, data) => {
+      if (!result) return;
+
+      this.setState({
+        location: data
+      });
+    });
+  }
+
+  toggleDropdown = (key, e) => {
+    var _windows = {
+      service: false,
+      location: false
+    };
+
+    _windows[key] = !this.state.windows[key];
+
+    this.setState({
+      windows: _windows
+    });
+  };
+
+  toDisplayDropdown(state) {
+    if (state) return "block";
+
+    return "none";
   }
 
   toggleWindow = e => {
@@ -35,6 +80,14 @@ export default class Booking extends React.Component {
       return {
         isWindowClosed: !prevState.isWindowClosed,
         selectedAppointment: null
+      };
+    });
+  };
+
+  toggleScheduler = e => {
+    this.setState(prevState => {
+      return {
+        isBookingClosed: !prevState.isBookingClosed
       };
     });
   };
@@ -54,12 +107,34 @@ export default class Booking extends React.Component {
   openBooking = e => {
     this.setState(prevState => {
       return {
-        isBookingClosed: !prevState.isWindowClosed
+        isBookingClosed: !prevState.isBookingClosed
       };
     });
   };
 
-  setService = (value, e) => {};
+  setService = (value, e) => {
+    this.setState(function(prevState) {
+      prevState.bookingForm.service_type_key = value.service_type_key;
+      prevState.bookingDisplay.service = value.service_type_key;
+      prevState.windows.service = false;
+      return prevState;
+    });
+  };
+
+  setLocation = (value, e) => {
+    this.setState(function(prevState) {
+      prevState.bookingForm.location_id = value.location_id;
+      prevState.bookingDisplay.location =
+        value.location_street +
+        " " +
+        value.location_barangay +
+        ", " +
+        value.location_city;
+      prevState.windows.location = false;
+
+      return prevState;
+    });
+  };
 
   renderStars(rating) {
     if (rating == 0) {
@@ -152,6 +227,12 @@ export default class Booking extends React.Component {
     );
   }
 
+  renderValue(data, nullMessage) {
+    if (data) return data;
+
+    return nullMessage;
+  }
+
   renderBooking() {
     if (this.state.isBookingClosed) return;
 
@@ -159,17 +240,35 @@ export default class Booking extends React.Component {
       <div className="booking-scheduler__backdrop">
         <div className="booking-scheduler__container">
           <div className="booking-scheduler__header">
-            <h4>Book a service</h4>
+            <a
+              class="booking-details__close"
+              onClick={e => this.toggleScheduler(e)}
+            >
+              &times;
+            </a>
+            <h4 className="booking-details__service-type">Book a service</h4>
           </div>
           <div className="booking-scheduler__body">
             <div className="booking-scheduler__field">
-              <strong class="booking-scheduler__label">Service</strong>
               <div class="booking-scheduler__input" ref={this.serviceTypeId}>
-                <div class="booking-scheduler__selected">
-                  <small class="booking-scheduler__title">Item</small>
-                  <span class="booking-scheduler__value">Value</span>
+                <div
+                  class="booking-scheduler__selected"
+                  onClick={e => this.toggleDropdown("service", e)}
+                >
+                  <small class="booking-scheduler__title">Service</small>
+                  <span class="booking-scheduler__value">
+                    {this.renderValue(
+                      this.state.bookingDisplay.service,
+                      "Select a booking"
+                    )}
+                  </span>
                 </div>
-                <ul className="booking-scheduler__options">
+                <ul
+                  className="booking-scheduler__options"
+                  style={{
+                    display: this.toDisplayDropdown(this.state.windows.service)
+                  }}
+                >
                   {this.state.services.map((value, index) => {
                     return (
                       <li
@@ -181,6 +280,51 @@ export default class Booking extends React.Component {
                         <span className="booking-scheduler__value">
                           {value.service_type_key}
                         </span>
+                        <small class="booking-scheduler__title">
+                          {"Starts at PHP" + value.service_price}
+                        </small>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+              <div class="booking-scheduler__input" ref={this.serviceTypeId}>
+                <div
+                  class="booking-scheduler__selected"
+                  onClick={e => this.toggleDropdown("location", e)}
+                >
+                  <small class="booking-scheduler__title">Location</small>
+                  <span class="booking-scheduler__value">
+                    {this.renderValue(
+                      this.state.bookingDisplay.location,
+                      "Select location"
+                    )}
+                  </span>
+                </div>
+                <ul
+                  className="booking-scheduler__options"
+                  style={{
+                    display: this.toDisplayDropdown(this.state.windows.location)
+                  }}
+                >
+                  {this.state.location.map((value, index) => {
+                    return (
+                      <li
+                        className="booking-scheduler__option"
+                        data-value={value.location_id}
+                        key={index}
+                        onClick={e => this.setLocation(value, e)}
+                      >
+                        <span className="booking-scheduler__value">
+                          {value.location_street +
+                            " " +
+                            value.location_barangay +
+                            ", " +
+                            value.location_city}
+                        </span>
+                        <small class="booking-scheduler__title">
+                          {value.location_type}
+                        </small>
                       </li>
                     );
                   })}
