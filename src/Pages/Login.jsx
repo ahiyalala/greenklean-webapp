@@ -1,6 +1,6 @@
 import React from "react";
 import Data from "../Helpers/Data";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 
 export default class Login extends React.Component {
   constructor(props) {
@@ -70,9 +70,9 @@ export default class Login extends React.Component {
               Login
             </button>
             <span className="block-span">or</span>
-            <a href="/signup" className="signup-btn">
+            <Link to="/signup" className="signup-btn">
               Sign up
-            </a>
+            </Link>
           </div>
         </div>
       </div>

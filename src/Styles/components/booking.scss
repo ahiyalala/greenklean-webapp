@@ -62,7 +62,9 @@
 .booking-scheduler__container {
   background-color: white;
   width: 400px;
+}
 
+.booking-details {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -85,6 +87,7 @@
 .booking-scheduler__body {
   padding: 2rem;
   min-height: 15rem;
+  background: white;
 }
 
 .booking-details__service-type {
@@ -173,11 +176,27 @@
   left: 0;
 
   background: rgba(0, 0, 0, 0.7);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
 }
 
 .booking-scheduler__label,
 .booking-scheduler__input {
   display: block;
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+
+  /*
+    Introduced in IE 10.
+    See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/
+  */
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .booking-scheduler__label {
@@ -203,6 +222,14 @@
   padding: 0.5rem;
   cursor: pointer;
 
+  &--light {
+    background: lightgray;
+
+    &:hover {
+      background: lightgray;
+    }
+  }
+
   &:hover {
     background: rgba(0, 0, 0, 0.01);
   }
@@ -218,7 +245,7 @@
   z-index: 10;
   width: 100%;
 
-  box-shadow: 0px 10px 10px lightgrey;
+  box-shadow: 0px 5px 5px #795548;
 }
 
 .booking-scheduler__item,
@@ -230,4 +257,41 @@
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.booking-scheduler__add {
+  text-decoration: none;
+  font-weight: 700;
+  color: black;
+  display: block;
+  padding: 0.5rem;
+}
+
+.booking-scheduler__add-text {
+  margin-left: 0.5rem;
+}
+
+.booking-scheduler__subtext {
+  color: lightslategray;
+  font-style: italic;
+}
+
+.booking-scheduler__accept {
+  padding: 0.8rem;
+  text-align: center;
+  color: white;
+  background-color: green;
+  display: block;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(0, 128, 0, 0.9);
+  }
+
+  &--unavailable {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+  }
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import Data from "../Helpers/Data";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import bcrypt from "bcryptjs";
 
 export default class Login extends React.Component {
@@ -63,12 +63,11 @@ export default class Login extends React.Component {
           signUpSuccessful: 1
         });
         return;
-      }
-      else{
-              this.setState({
-                signUpSuccessful: -1
-              });
-              return;
+      } else {
+        this.setState({
+          signUpSuccessful: -1
+        });
+        return;
       }
     });
   };
@@ -99,8 +98,8 @@ export default class Login extends React.Component {
     }
   };
 
-  setGender = (e,value) => {
-    this.setState((prevState)=>{
+  setGender = (e, value) => {
+    this.setState(prevState => {
       var prevData = prevState.signUpData;
       var prevValidity = prevState.formValidity;
 
@@ -108,11 +107,11 @@ export default class Login extends React.Component {
       prevValidity.gender = 1;
 
       return {
-        formValidity:prevValidity,
-        signUpData:prevData
-      }
-    })
-  }
+        formValidity: prevValidity,
+        signUpData: prevData
+      };
+    });
+  };
 
   checkPassword = e => {
     var password = this.passwordField.current.value;
@@ -182,33 +181,32 @@ export default class Login extends React.Component {
   };
 
   setCompleted = () => {
-
     return (
       <div className="login-container">
-      <div className="login-backdrop">
-        <img
-          className="img-logo"
-          src="https://greenklean.ph/front/img/GKlean House Icon Y.png"
-        />
-        <h3 className="brand-text-color">Welcome to Greenklean</h3>
-        <div className="form-region">
-          <h2 className="form-header">You have successfully signed up!</h2>
-          <hr />
-          <a href="/login" className="signup-btn">
-            Back to login
-          </a>
+        <div className="login-backdrop">
+          <img
+            className="img-logo"
+            src="https://greenklean.ph/front/img/GKlean House Icon Y.png"
+          />
+          <h3 className="brand-text-color">Welcome to Greenklean</h3>
+          <div className="form-region">
+            <h2 className="form-header">You have successfully signed up!</h2>
+            <hr />
+            <Link to="/login" className="signup-btn">
+              Back to login
+            </Link>
+          </div>
         </div>
       </div>
-    </div>
     );
-  }
+  };
 
   render() {
     if (localStorage.getItem("credentials") != null) {
       return <Redirect to="/booking" />;
     }
 
-    if(this.state.signUpSuccessful == 1){
+    if (this.state.signUpSuccessful == 1) {
       return this.setCompleted();
     }
 
@@ -224,8 +222,12 @@ export default class Login extends React.Component {
             <h4 className="form-header">Sign up</h4>
             <span
               className="login-message error"
-              style={{ display: (this.state.signUpSuccessful == -1)? "block":"none" }}
-            >Failed to signup, try again or contact administrator</span>
+              style={{
+                display: this.state.signUpSuccessful == -1 ? "block" : "none"
+              }}
+            >
+              Failed to signup, try again or contact administrator
+            </span>
             <div className="form-row nowrap">
               <label className="form-label">
                 E-mail address*
@@ -357,9 +359,9 @@ export default class Login extends React.Component {
               Sign up
             </button>
             <span className="block-span">or</span>
-            <a href="/login" className="signup-btn">
+            <Link to="/login" className="signup-btn">
               Back to login
-            </a>
+            </Link>
           </div>
         </div>
       </div>

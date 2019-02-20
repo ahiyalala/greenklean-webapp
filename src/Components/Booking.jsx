@@ -1,12 +1,11 @@
 import React from "react";
 import Data from "../Helpers/Data";
+import { Link } from "react-router-dom";
 
 export default class Booking extends React.Component {
   constructor(props) {
     super(props);
 
-    //Refs
-    this.serviceTypeId = React.createRef();
     var customer = localStorage.getItem("credentials");
     //States
     this.state = {
@@ -20,11 +19,13 @@ export default class Booking extends React.Component {
       },
       windows: {
         service: false,
-        location: false
+        location: false,
+        housekeepers: false
       },
       bookingDisplay: {
         service: null,
-        location: null
+        location: null,
+        number_of_housekeepers: 1
       },
       bookingForm: {
         service_type_key: null,
@@ -131,6 +132,16 @@ export default class Booking extends React.Component {
         ", " +
         value.location_city;
       prevState.windows.location = false;
+
+      return prevState;
+    });
+  };
+
+  setHouseKeepers = (value, e) => {
+    this.setState(function(prevState) {
+      prevState.bookingForm.number_of_housekeepers = value;
+      prevState.bookingDisplay.number_of_housekeepers = value;
+      prevState.windows.housekeepers = false;
 
       return prevState;
     });
@@ -250,7 +261,7 @@ export default class Booking extends React.Component {
           </div>
           <div className="booking-scheduler__body">
             <div className="booking-scheduler__field">
-              <div class="booking-scheduler__input" ref={this.serviceTypeId}>
+              <div class="booking-scheduler__input">
                 <div
                   class="booking-scheduler__selected"
                   onClick={e => this.toggleDropdown("service", e)}
@@ -273,7 +284,6 @@ export default class Booking extends React.Component {
                     return (
                       <li
                         className="booking-scheduler__option"
-                        data-value={value.service_type_key}
                         key={index}
                         onClick={e => this.setService(value, e)}
                       >
@@ -288,7 +298,18 @@ export default class Booking extends React.Component {
                   })}
                 </ul>
               </div>
-              <div class="booking-scheduler__input" ref={this.serviceTypeId}>
+              <div class="booking-scheduler__input">
+                <div class="booking-scheduler__selected">
+                  <small class="booking-scheduler__title">Payment</small>
+                  <span class="booking-scheduler__value">
+                    Cash{" "}
+                    <small className="booking-scheduler__subtext">
+                      (more methods coming soon!)
+                    </small>
+                  </span>
+                </div>
+              </div>
+              <div class="booking-scheduler__input">
                 <div
                   class="booking-scheduler__selected"
                   onClick={e => this.toggleDropdown("location", e)}
@@ -297,7 +318,9 @@ export default class Booking extends React.Component {
                   <span class="booking-scheduler__value">
                     {this.renderValue(
                       this.state.bookingDisplay.location,
-                      "Select location"
+                      this.state.location.length > 0
+                        ? "Select location"
+                        : "No location added yet"
                     )}
                   </span>
                 </div>
@@ -311,7 +334,6 @@ export default class Booking extends React.Component {
                     return (
                       <li
                         className="booking-scheduler__option"
-                        data-value={value.location_id}
                         key={index}
                         onClick={e => this.setLocation(value, e)}
                       >
@@ -328,10 +350,67 @@ export default class Booking extends React.Component {
                       </li>
                     );
                   })}
+                  <li className="booking-scheduler__option booking-scheduler__option--light">
+                    <Link to="/places" className="booking-scheduler__add">
+                      <i className="la la-plus-circle booking-scheduler__add-icon" />
+                      <span className="booking-scheduler__add-text">
+                        Add a place
+                      </span>
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <div
+                class="booking-scheduler__input"
+                style={{
+                  display: this.toDisplayDropdown(
+                    this.state.bookingDisplay.service
+                  )
+                }}
+              >
+                <div
+                  class="booking-scheduler__selected"
+                  onClick={e => this.toggleDropdown("housekeepers", e)}
+                >
+                  <small class="booking-scheduler__title">Housekeepers</small>
+                  <span class="booking-scheduler__value">
+                    {this.renderValue(
+                      this.state.bookingDisplay.number_of_housekeepers,
+                      "Invalid"
+                    )}
+                  </span>
+                </div>
+                <ul
+                  className="booking-scheduler__options"
+                  style={{
+                    display: this.toDisplayDropdown(
+                      this.state.windows.housekeepers
+                    )
+                  }}
+                >
+                  {[1, 2, 3, 4, 5].map((value, index) => {
+                    return (
+                      <li
+                        className="booking-scheduler__option"
+                        key={index}
+                        onClick={e => this.setHouseKeepers(value, e)}
+                      >
+                        <span className="booking-scheduler__value">
+                          {value}
+                        </span>
+                      </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
           </div>
+          <div
+            class="booking-scheduler__input"
+            style={{
+              display: this.toDisplayDropdown(this.state.bookingDisplay.service)
+            }}
+          />
         </div>
       </div>
     );
