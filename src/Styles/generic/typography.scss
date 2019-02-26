@@ -1,25 +1,48 @@
-span, p, h1,h2,h3,h4,h5,h6, a,label{
-    font-size:$base;
+@font-face {
+  font-family: "Futura";
+  src: url("assets/FutuHv.ttf");
 }
 
-.brand-text-color{
-    color:$brand-text-color;
+strong,
+h1,
+h2,
+h3,
+h4 {
+  font-family: "Futura";
+  font-weight: bold;
 }
 
-.form-label{
-    font-size:$small;
+span,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+label {
+  font-size: $base;
 }
 
-.login-message{
-    text-align: center;
-    font-size:$small;
-    display:none;
+.brand-text-color {
+  color: $brand-text-color;
 }
 
-.error{
-    color:$red;
+.form-label {
+  font-size: $small;
 }
 
-.subdetails{
-    font-size:0.8rem;
+.login-message {
+  text-align: center;
+  font-size: $small;
+  display: none;
+}
+
+.error {
+  color: $red;
+}
+
+.subdetails {
+  font-size: 0.8rem;
 }

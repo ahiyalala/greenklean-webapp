@@ -1,17 +1,24 @@
 import React from "react";
 import Data from "../Helpers/Data";
 import { Link } from "react-router-dom";
+import DatePicker from "react-datepicker";
+
+import moment from "moment";
+
+import "react-datepicker/dist/react-datepicker.css";
 
 export default class Booking extends React.Component {
   constructor(props) {
     super(props);
 
-    var customer = localStorage.getItem("credentials");
+    this.moment = moment();
+    var customer = JSON.parse(localStorage.getItem("credentials"));
     //States
     this.state = {
       isWindowClosed: true,
       isBookingClosed: true,
       selectedAppointment: null,
+      isSendingData: false,
       services: [],
       location: [],
       bookingDetails: {
@@ -25,19 +32,52 @@ export default class Booking extends React.Component {
       bookingDisplay: {
         service: null,
         location: null,
-        number_of_housekeepers: 1
+        number_of_housekeepers: 1,
+        date: this.addDays(new Date(), 7),
+        time: new Date(0, 0, 0, 7)
       },
       bookingForm: {
         service_type_key: null,
         customer_id: customer.customer_id,
         location_id: null,
         payment_type: "Cash",
-        date: null,
-        start_time: null,
+        date: moment(this.addDays(new Date(), 7)).format('YYYY-MM-DD'),
+        start_time: moment(new Date(0, 0, 0, 7)).format("H:mm"),
         number_of_housekeepers: 1
       }
     };
   }
+
+  sendAppointmentData = e => {
+    var content = this.state.bookingForm;
+
+    if (!this.isValidForm()) return;
+
+    this.setState({
+      isSendingData: true
+    });
+
+    Data.sendAuthenticatedData("/api/appointments", content, (result, data) => {
+      if (!result){
+        try{
+          var _content = JSON.parse(data);
+          alert(_content.Message)
+        }
+        catch(e){
+          alert("Oops, something went wrong")
+        this.setState({
+          isSendingData: false
+        });
+        return;
+        }
+      }
+
+      console.log(data);
+      this.setState({
+        isSendingData: false
+      });
+    });
+  };
 
   componentDidMount() {
     Data.getData("/api/services", (result, data) => {
@@ -56,6 +96,38 @@ export default class Booking extends React.Component {
       });
     });
   }
+
+  isValidForm = () => {
+    var _service = this.state.bookingForm.service_type_key;
+    var _location = this.state.bookingForm.location_id;
+
+    return _service && _location;
+  };
+
+  addDays = (date, days) => {
+    var result = new Date(date);
+    result.setDate(date.getDate() + days);
+    return result;
+  };
+
+  handleTimeChange = value => {
+    var timeOnly = moment(value).format("H:mm");
+    this.setState(prevState => {
+      prevState.bookingDisplay.time = value;
+      prevState.bookingForm.start_time = timeOnly;
+
+      return prevState;
+    });
+  };
+
+  handleDateChange = dateValue => {
+    this.setState(prevState => {
+      prevState.bookingDisplay.date = dateValue;
+      prevState.bookingForm.date = moment(dateValue).format('YYYY-MM-DD');
+
+      return prevState;
+    });
+  };
 
   toggleDropdown = (key, e) => {
     var _windows = {
@@ -168,7 +240,7 @@ export default class Booking extends React.Component {
     stars.map((value, index) => {
       var star = value ? "la-star" : "la-star-half";
 
-      return <i class={"la " + star} />;
+      return <i className={"la " + star} />;
     });
   }
 
@@ -183,7 +255,7 @@ export default class Booking extends React.Component {
         <div className="booking-details">
           <div className="booking-details__header">
             <a
-              class="booking-details__close"
+              className="booking-details__close"
               onClick={e => this.toggleWindow(e)}
             >
               &times;
@@ -252,7 +324,7 @@ export default class Booking extends React.Component {
         <div className="booking-scheduler__container">
           <div className="booking-scheduler__header">
             <a
-              class="booking-details__close"
+              className="booking-details__close"
               onClick={e => this.toggleScheduler(e)}
             >
               &times;
@@ -260,14 +332,19 @@ export default class Booking extends React.Component {
             <h4 className="booking-details__service-type">Book a service</h4>
           </div>
           <div className="booking-scheduler__body">
-            <div className="booking-scheduler__field">
-              <div class="booking-scheduler__input">
+            <div
+              className="booking-scheduler__field"
+              style={{
+                pointerEvents: this.state.isSendingData ? "none" : "auto"
+              }}
+            >
+              <div className="booking-scheduler__input">
                 <div
-                  class="booking-scheduler__selected"
+                  className="booking-scheduler__selected"
                   onClick={e => this.toggleDropdown("service", e)}
                 >
-                  <small class="booking-scheduler__title">Service</small>
-                  <span class="booking-scheduler__value">
+                  <small className="booking-scheduler__title">Service</small>
+                  <span className="booking-scheduler__value">
                     {this.renderValue(
                       this.state.bookingDisplay.service,
                       "Select a booking"
@@ -290,7 +367,7 @@ export default class Booking extends React.Component {
                         <span className="booking-scheduler__value">
                           {value.service_type_key}
                         </span>
-                        <small class="booking-scheduler__title">
+                        <small className="booking-scheduler__title">
                           {"Starts at PHP" + value.service_price}
                         </small>
                       </li>
@@ -298,10 +375,10 @@ export default class Booking extends React.Component {
                   })}
                 </ul>
               </div>
-              <div class="booking-scheduler__input">
-                <div class="booking-scheduler__selected">
-                  <small class="booking-scheduler__title">Payment</small>
-                  <span class="booking-scheduler__value">
+              <div className="booking-scheduler__input">
+                <div className="booking-scheduler__selected">
+                  <small className="booking-scheduler__title">Payment</small>
+                  <span className="booking-scheduler__value">
                     Cash{" "}
                     <small className="booking-scheduler__subtext">
                       (more methods coming soon!)
@@ -309,13 +386,13 @@ export default class Booking extends React.Component {
                   </span>
                 </div>
               </div>
-              <div class="booking-scheduler__input">
+              <div className="booking-scheduler__input">
                 <div
-                  class="booking-scheduler__selected"
+                  className="booking-scheduler__selected"
                   onClick={e => this.toggleDropdown("location", e)}
                 >
-                  <small class="booking-scheduler__title">Location</small>
-                  <span class="booking-scheduler__value">
+                  <small className="booking-scheduler__title">Location</small>
+                  <span className="booking-scheduler__value">
                     {this.renderValue(
                       this.state.bookingDisplay.location,
                       this.state.location.length > 0
@@ -344,7 +421,7 @@ export default class Booking extends React.Component {
                             ", " +
                             value.location_city}
                         </span>
-                        <small class="booking-scheduler__title">
+                        <small className="booking-scheduler__title">
                           {value.location_type}
                         </small>
                       </li>
@@ -361,7 +438,7 @@ export default class Booking extends React.Component {
                 </ul>
               </div>
               <div
-                class="booking-scheduler__input"
+                className="booking-scheduler__input"
                 style={{
                   display: this.toDisplayDropdown(
                     this.state.bookingDisplay.service
@@ -369,11 +446,13 @@ export default class Booking extends React.Component {
                 }}
               >
                 <div
-                  class="booking-scheduler__selected"
+                  className="booking-scheduler__selected"
                   onClick={e => this.toggleDropdown("housekeepers", e)}
                 >
-                  <small class="booking-scheduler__title">Housekeepers</small>
-                  <span class="booking-scheduler__value">
+                  <small className="booking-scheduler__title">
+                    Housekeepers
+                  </small>
+                  <span className="booking-scheduler__value">
                     {this.renderValue(
                       this.state.bookingDisplay.number_of_housekeepers,
                       "Invalid"
@@ -403,14 +482,50 @@ export default class Booking extends React.Component {
                   })}
                 </ul>
               </div>
+              <div className="booking-scheduler__input-group">
+                <div
+                  className="booking-scheduler__input"
+                  style={{
+                    display: this.toDisplayDropdown(
+                      this.state.bookingDisplay.service
+                    )
+                  }}
+                >
+                  <small className="booking-scheduler__title">
+                    Date and Time
+                  </small>
+                  <DatePicker
+                    className="booking-scheduler__datepicker"
+                    selected={this.state.bookingDisplay.date}
+                    onChange={this.handleDateChange}
+                    dateFormat="MMMM d, yyyy"
+                    minDate={this.addDays(new Date(), 7)}
+                    maxDate={this.addDays(this.addDays(new Date(), 7), 90)}
+                  />
+                  <DatePicker
+                    selected={this.state.bookingDisplay.time}
+                    onChange={this.handleTimeChange}
+                    showTimeSelect
+                    showTimeSelectOnly
+                    timeIntervals={60}
+                    dateFormat="h:mm aa"
+                    minTime={new Date(0, 0, 0, 7)}
+                    maxTime={new Date(0, 0, 0, 19)}
+                  />
+                </div>
+              </div>
+              <div
+                className={
+                  !this.isValidForm() || this.state.isSendingData
+                    ? "booking-scheduler__book-btn booking-scheduler__book-btn--disabled"
+                    : "booking-scheduler__book-btn"
+                }
+                onClick={e => this.sendAppointmentData(e)}
+              >
+                <span>Set an appointment</span>
+              </div>
             </div>
           </div>
-          <div
-            class="booking-scheduler__input"
-            style={{
-              display: this.toDisplayDropdown(this.state.bookingDisplay.service)
-            }}
-          />
         </div>
       </div>
     );

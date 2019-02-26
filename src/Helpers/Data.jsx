@@ -47,6 +47,26 @@ export default class Data extends React.Component {
       .catch(error => fallback(false, error));
   }
 
+  static async sendAuthenticatedData(url, content, fallback) {
+    var profile = JSON.parse(localStorage.getItem("credentials"));
+
+    fetch(baseUrl + url, {
+      method: "post",
+      headers: new Headers({
+        Authentication: profile.email_address + " " + profile.user_token,
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify(content)
+    })
+      .then(response => {
+        if (response.ok) return response.body;
+
+        throw new Error("fail");
+      })
+      .then(data => fallback(true, data))
+      .catch(error => fallback(false, error));
+  }
+
   static async authenticateUser(url, content, fallback) {
     fetch(baseUrl + url, {
       method: "post",

@@ -61,7 +61,15 @@
 .booking-details,
 .booking-scheduler__container {
   background-color: white;
+}
+
+.booking-details {
   width: 400px;
+}
+
+.booking-scheduler__container {
+  display: flex;
+  width: 70%;
 }
 
 .booking-details {
@@ -79,8 +87,12 @@
 .booking-details__header,
 .booking-scheduler__header {
   padding: 2rem;
-  background-color: #faed2b;
+  background-color: $greenklean-yellow;
   position: relative;
+}
+
+.booking-scheduler__header {
+  width: 30%;
 }
 
 .booking-details__content,
@@ -88,6 +100,10 @@
   padding: 2rem;
   min-height: 15rem;
   background: white;
+}
+
+.booking-scheduler__body {
+  width: 100%;
 }
 
 .booking-details__service-type {
@@ -162,7 +178,7 @@
   color: #fff;
   text-decoration: none;
   padding: 10px 20px;
-  background-color: #faed2b;
+  background-color: $greenklean-yellow;
   border-radius: 16px;
 }
 
@@ -293,5 +309,27 @@
     background-color: rgba(0, 0, 0, 0.8);
     color: rgba(255, 255, 255, 0.6);
     pointer-events: none;
+  }
+}
+
+.booking-scheduler__title {
+  display: block;
+}
+
+.booking-scheduler__datepicker {
+  margin-top: 10px;
+  margin-right: 1rem;
+}
+
+.booking-scheduler__book-btn {
+  display: block;
+  text-align: center;
+  background: $greenklean-yellow;
+  padding: 0.725rem;
+  cursor: pointer;
+
+  &.booking-scheduler__book-btn--disabled {
+    pointer-events: none;
+    background: lightgray;
   }
 }
