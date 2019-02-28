@@ -58,13 +58,9 @@ export default class Data extends React.Component {
       }),
       body: JSON.stringify(content)
     })
-      .then(response => {
-        if (response.ok) return response.body;
-
-        throw new Error("fail");
-      })
-      .then(data => fallback(true, data))
-      .catch(error => fallback(false, error));
+      .then(response => response.json())
+      .then(data => fallback(data))
+      .catch(error => alert("Sorry, something went wrong!"));
   }
 
   static async authenticateUser(url, content, fallback) {

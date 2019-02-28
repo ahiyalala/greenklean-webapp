@@ -13,7 +13,7 @@ export default class Places extends React.Component {
   render() {
     return (
       <div>
-        <Navigation />
+        <Navigation path="/booking/places" />
         <div className="container">
           <Sidebar />
         </div>

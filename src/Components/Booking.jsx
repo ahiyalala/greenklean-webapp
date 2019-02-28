@@ -13,12 +13,15 @@ export default class Booking extends React.Component {
 
     this.moment = moment();
     var customer = JSON.parse(localStorage.getItem("credentials"));
+    this.customer_id = customer.customer_id;
+    this.cancelTick = null;
     //States
     this.state = {
       isWindowClosed: true,
       isBookingClosed: true,
       selectedAppointment: null,
       isSendingData: false,
+      cancelTimer: 5,
       services: [],
       location: [],
       bookingDetails: {
@@ -38,10 +41,10 @@ export default class Booking extends React.Component {
       },
       bookingForm: {
         service_type_key: null,
-        customer_id: customer.customer_id,
+        customer_id: this.customer_id,
         location_id: null,
         payment_type: "Cash",
-        date: moment(this.addDays(new Date(), 7)).format('YYYY-MM-DD'),
+        date: moment(this.addDays(new Date(), 7)).format("YYYY-MM-DD"),
         start_time: moment(new Date(0, 0, 0, 7)).format("H:mm"),
         number_of_housekeepers: 1
       }
@@ -50,31 +53,50 @@ export default class Booking extends React.Component {
 
   sendAppointmentData = e => {
     var content = this.state.bookingForm;
-
+    if (!window.confirm("Proceed with booking?")) {
+      return;
+    }
     if (!this.isValidForm()) return;
 
     this.setState({
       isSendingData: true
     });
 
-    Data.sendAuthenticatedData("/api/appointments", content, (result, data) => {
-      if (!result){
-        try{
-          var _content = JSON.parse(data);
-          alert(_content.Message)
-        }
-        catch(e){
-          alert("Oops, something went wrong")
+    Data.sendAuthenticatedData("/api/appointments", content, data => {
+      if (data.message != null) {
+        alert(data.message);
         this.setState({
           isSendingData: false
         });
         return;
-        }
       }
-
-      console.log(data);
+      this.props.onAppointmentsUpdate();
       this.setState({
-        isSendingData: false
+        isSendingData: false,
+        selectedAppointment: data,
+        isWindowClosed: false,
+        isBookingClosed: true,
+        windows: {
+          service: false,
+          location: false,
+          housekeepers: false
+        },
+        bookingDisplay: {
+          service: null,
+          location: null,
+          number_of_housekeepers: 1,
+          date: this.addDays(new Date(), 7),
+          time: new Date(0, 0, 0, 7)
+        },
+        bookingForm: {
+          service_type_key: null,
+          customer_id: this.customer_id,
+          location_id: null,
+          payment_type: "Cash",
+          date: moment(this.addDays(new Date(), 7)).format("YYYY-MM-DD"),
+          start_time: moment(new Date(0, 0, 0, 7)).format("H:mm"),
+          number_of_housekeepers: 1
+        }
       });
     });
   };
@@ -123,7 +145,7 @@ export default class Booking extends React.Component {
   handleDateChange = dateValue => {
     this.setState(prevState => {
       prevState.bookingDisplay.date = dateValue;
-      prevState.bookingForm.date = moment(dateValue).format('YYYY-MM-DD');
+      prevState.bookingForm.date = moment(dateValue).format("YYYY-MM-DD");
 
       return prevState;
     });
@@ -240,7 +262,7 @@ export default class Booking extends React.Component {
     stars.map((value, index) => {
       var star = value ? "la-star" : "la-star-half";
 
-      return <i className={"la " + star} />;
+      return <i key={index} className={"la " + star} />;
     });
   }
 
@@ -286,7 +308,7 @@ export default class Booking extends React.Component {
               {this.state.selectedAppointment.housekeepers.map(
                 (value, index) => {
                   return (
-                    <li className="booking-details__housekeeper">
+                    <li className="booking-details__housekeeper" key={index}>
                       {value.last_name +
                         ", " +
                         value.first_name +
@@ -309,6 +331,10 @@ export default class Booking extends React.Component {
       </div>
     );
   }
+
+  bookingCancellable = appointment => {
+    return;
+  };
 
   renderValue(data, nullMessage) {
     if (data) return data;

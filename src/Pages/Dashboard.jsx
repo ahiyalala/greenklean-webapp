@@ -34,10 +34,26 @@ export default class Dashboard extends React.Component {
     });
   }
 
+  handleAppointmentsChange = () => {
+    Data.getAuthenticatedData("/api/appointments", (result, data) => {
+      if (!result) return;
+
+      var needsReview = data.filter(item => item.is_finished == 1);
+      var pending = data.filter(item => item.is_finished == 0);
+      this.setState({
+        appointments: {
+          all: data,
+          finished: needsReview,
+          pending: pending
+        }
+      });
+    });
+  };
+
   render() {
     return (
       <div>
-        <Navigation />
+        <Navigation path="/booking" />
         <div className="container">
           <Sidebar
             submessage={
@@ -46,7 +62,10 @@ export default class Dashboard extends React.Component {
               " pending appointments"
             }
           />
-          <Booking appointments={this.state.appointments} />
+          <Booking
+            appointments={this.state.appointments}
+            onAppointmentsUpdate={this.handleAppointmentsChange}
+          />
         </div>
       </div>
     );
