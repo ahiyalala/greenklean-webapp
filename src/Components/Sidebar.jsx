@@ -15,6 +15,8 @@ export default class Sidebar extends React.Component {
   }
 
   logoutEvent = e => {
+    if(!window.confirm("Are you sure you want to log out?")) return;
+
     localStorage.removeItem("credentials");
     this.setState({ hasLoggedOut: true });
   };
@@ -48,10 +50,6 @@ export default class Sidebar extends React.Component {
         <div className="dashboard-details">
           <p className="subdetails">{this.props.submessage}</p>
         </div>
-        <a href="javascript:void(0)" className="sidebar-navigation">
-          View your profile
-          <i className="la la-arrow-right" />
-        </a>
         <a
           href="javascript:void(0)"
           onClick={this.logoutEvent}

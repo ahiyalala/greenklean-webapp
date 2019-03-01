@@ -1,6 +1,6 @@
 import React from "react";
-const baseUrl = "http://localhost:80";
-//const baseUrl = "https://greenklean.ph";
+//const baseUrl = "http://localhost:80";
+const baseUrl = "https://greenklean.ph";
 
 export default class Data extends React.Component {
   static getData(url, fallback) {

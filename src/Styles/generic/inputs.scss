@@ -29,3 +29,15 @@ input {
   padding: 5px;
   cursor: pointer;
 }
+
+.btn{
+  font-weight: normal;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 20px;
+  background-color: $greenklean-yellow;
+  border-radius: 16px;
+  display: inline-block;
+  width:auto;
+  cursor: pointer;
+}

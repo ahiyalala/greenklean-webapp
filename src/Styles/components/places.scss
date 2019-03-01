@@ -1,0 +1,14 @@
+.places-container {
+    width: 80%;
+    display: inline-block;
+    padding: 1rem 2rem;
+  
+    @include respond-to-small {
+      padding: 1rem 0;
+      width: 100%;
+    }
+  }
+
+  .places-header {
+    font-size: 1.5rem;
+  }
