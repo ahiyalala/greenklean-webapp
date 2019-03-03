@@ -269,6 +269,11 @@ export default class Booking extends React.Component {
   renderDetails() {
     if (!this.state.selectedAppointment) return;
 
+    var today = new Date();
+    var appointmentDate = this.state.selectedAppointment.date;
+
+    console.log(moment(appointmentDate).fromNow(true));
+
     return (
       <div
         className="booking-details__backdrop"
@@ -577,7 +582,7 @@ export default class Booking extends React.Component {
           {this.props.appointments.pending.map((value, index) => {
             return (
               <div
-                className="booking-block"
+                className="booking-block booking-block--cursor"
                 onClick={e => this.openWindow(e, value.service_cleaning_id)}
                 key={index}
               >

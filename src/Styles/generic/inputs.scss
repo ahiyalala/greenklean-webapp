@@ -30,7 +30,7 @@ input {
   cursor: pointer;
 }
 
-.btn{
+.btn {
   font-weight: normal;
   color: #fff;
   text-decoration: none;
@@ -38,6 +38,19 @@ input {
   background-color: $greenklean-yellow;
   border-radius: 16px;
   display: inline-block;
-  width:auto;
+  width: auto;
   cursor: pointer;
+}
+
+.link {
+  &--adjust {
+    margin-right: 0.5rem;
+  }
+  &--brand {
+    color: $greenklean-yellow;
+  }
+
+  &--danger {
+    color: red;
+  }
 }
