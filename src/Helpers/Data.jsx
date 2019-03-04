@@ -63,6 +63,24 @@ export default class Data extends React.Component {
       .catch(error => alert("Sorry, something went wrong!"));
   }
 
+  static async deleteAuthenticatedData(url, fallback) {
+    var profile = JSON.parse(localStorage.getItem("credentials"));
+
+    fetch(baseUrl + url, {
+      method: "delete",
+      headers: new Headers({
+        Authentication: profile.email_address + " " + profile.user_token,
+        "Content-Type": "application/json"
+      })
+    })
+      .then(response => {
+        console.log(response);
+        return response.ok;
+      })
+      .then(data => fallback(data))
+      .catch(error => alert("Sorry, something went wrong!"));
+  }
+
   static async authenticateUser(url, content, fallback) {
     fetch(baseUrl + url, {
       method: "post",

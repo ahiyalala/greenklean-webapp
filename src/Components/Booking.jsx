@@ -269,11 +269,6 @@ export default class Booking extends React.Component {
   renderDetails() {
     if (!this.state.selectedAppointment) return;
 
-    var today = new Date();
-    var appointmentDate = this.state.selectedAppointment.date;
-
-    console.log(moment(appointmentDate).fromNow(true));
-
     return (
       <div
         className="booking-details__backdrop"
@@ -290,7 +285,9 @@ export default class Booking extends React.Component {
             <small className="booking-details__subtext">
               Appointment details
             </small>
-            <h4 className="booking-details__service-type">Express Cleaning</h4>
+            <h4 className="booking-details__service-type">
+              {this.state.selectedAppointment.service.service_type_key}
+            </h4>
             <span className="booking-details__data">
               Date:{" "}
               <span className="booking-details__value">
@@ -329,16 +326,53 @@ export default class Booking extends React.Component {
               )}
             </ul>
           </div>
-          <a className="booking-details__cancel">
-            <span>Cancel booking</span>
-          </a>
+          {this.bookingCancellable(this.state.selectedAppointment)}
         </div>
       </div>
     );
   }
 
   bookingCancellable = appointment => {
+    var today = moment();
+    var appointmentDate = moment(appointment.date);
+    var difference = appointmentDate.diff(today, "days");
+    if (difference > 1) {
+      return (
+        <a
+          className="booking-details__cancel"
+          onClick={e =>
+            this.cancelAppointment(e, appointment.service_cleaning_id)
+          }
+        >
+          <span>Cancel booking</span>
+        </a>
+      );
+    }
+
     return;
+  };
+
+  cancelAppointment = (e, service_id) => {
+    var willProceed = window.confirm("Do you want to cancel your booking?");
+    if (willProceed) {
+      Data.deleteAuthenticatedData(
+        "/api/appointments/cancel/" + service_id,
+        result => {
+          if (result) {
+            this.props.onAppointmentsUpdate();
+          } else {
+            window.alert("We can't process your request");
+          }
+
+          this.setState({
+            isWindowClosed: true,
+            isBookingClosed: true,
+            selectedAppointment: null
+          });
+          return;
+        }
+      );
+    }
   };
 
   renderValue(data, nullMessage) {

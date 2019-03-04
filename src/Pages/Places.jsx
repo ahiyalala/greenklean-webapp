@@ -10,18 +10,18 @@ export default class Places extends React.Component {
     super(props);
 
     this.state = {
-      placesList:null
-    }
+      placesList: null
+    };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     Data.getAuthenticatedData("/api/places", (result, data) => {
-      if(!result) return;
+      if (!result) return;
 
       this.setState({
-        placesList:data
+        placesList: data
       });
-    })
+    });
   }
 
   render() {
