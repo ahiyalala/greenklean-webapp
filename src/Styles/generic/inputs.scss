@@ -5,6 +5,9 @@ input {
 .form-field {
   display: block;
   margin-bottom: 20px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px;
 }
 
 .login-btn {

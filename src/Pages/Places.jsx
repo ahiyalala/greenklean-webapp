@@ -24,13 +24,26 @@ export default class Places extends React.Component {
     });
   }
 
+  updateList = () => {
+    Data.getAuthenticatedData("/api/places", (result, data) => {
+      if (!result) return;
+
+      this.setState({
+        placesList: data
+      });
+    });
+  };
+
   render() {
     return (
       <div>
         <Navigation path="/booking/places" />
         <div className="container">
           <Sidebar />
-          <PlacesList data={this.state.placesList} />
+          <PlacesList
+            data={this.state.placesList}
+            onListUpdate={this.updateList}
+          />
         </div>
       </div>
     );

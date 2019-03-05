@@ -27,8 +27,8 @@ ReactDOM.render(
     <div>
       <PrivateRoute path="/booking" exact component={Dashboard} />
       <PrivateRoute path="/booking/places" component={Places} />
-      <Route exact path="/login" component={Login} />
-      <Route exact path="/signup" component={Signup} />
+      <Route exact path="/booking/login" component={Login} />
+      <Route exact path="/booking/signup" component={Signup} />
     </div>
   </Router>,
   document.getElementById("root")

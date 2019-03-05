@@ -1,6 +1,5 @@
 import React from "react";
-const baseUrl = "http://localhost:80";
-//const baseUrl = "https://greenklean.ph";
+const baseUrl = "https://greenklean.ph";
 
 export default class Data extends React.Component {
   static getData(url, fallback) {
@@ -74,7 +73,6 @@ export default class Data extends React.Component {
       })
     })
       .then(response => {
-        console.log(response);
         return response.ok;
       })
       .then(data => fallback(data))

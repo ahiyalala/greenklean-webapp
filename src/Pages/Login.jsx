@@ -30,6 +30,13 @@ export default class Login extends React.Component {
     });
   }
 
+  logInByEnter = event => {
+    var key = event.key || event.keyCode;
+    if (key === "Enter" || key === 13) {
+      this.loginEvent(event);
+    }
+  };
+
   render() {
     if (localStorage.getItem("credentials") != null) {
       return <Redirect to="/booking" />;
@@ -56,6 +63,7 @@ export default class Login extends React.Component {
                 type="text"
                 className="form-field"
                 ref={this.usernameField}
+                onKeyDown={e => this.logInByEnter(e)}
               />
             </label>
             <label className="form-label">
@@ -64,6 +72,7 @@ export default class Login extends React.Component {
                 type="password"
                 className="form-field"
                 ref={this.passwordField}
+                onKeyDown={e => this.logInByEnter(e)}
               />
             </label>
             <button className="login-btn" onClick={e => this.login(e)}>
